@@ -1,14 +1,14 @@
 'use client';
 
 import css from "../../../../components/NotePreview/NotePreview.module.css";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
 import Modal from '@/components/Modal/Modal';
 import { useRouter } from 'next/navigation';
 
-const NoteDetails = () => {
-  const {id} = useParams();
+const NoteDetails = ({id}: {id: string}) => {
+//   const { id } = useParams();
   const router = useRouter();
   
   const close = () => router.back();

@@ -39,6 +39,7 @@ function Modal({ onClose, children }: ModalProps) {
       aria-modal="true"
     >
       <div className={css.modal} onClick={(event) => event.stopPropagation()}>
+        <button className={css.close} onClick={onClose}>X</button>
         {children}
       </div>
     </div>,
