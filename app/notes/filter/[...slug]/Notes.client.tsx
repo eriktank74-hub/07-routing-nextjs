@@ -1,5 +1,4 @@
 'use client';
-import { notFound } from "next/navigation";
 import css from "./page.module.css";
 import { useQuery } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";

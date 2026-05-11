@@ -1,45 +1,27 @@
-'use client';
-
-import css from "../../../../components/NotePreview/NotePreview.module.css";
-import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
-import Modal from '@/components/Modal/Modal';
-import { useRouter } from 'next/navigation';
+import NotesDetails from "./NotePreview.client";
 
-const NoteDetails = () => {
-  const {id} = useParams();
-  const router = useRouter();
-  
-  const close = () => router.back();
+interface NoteDetailsPageProps {
+    params: Promise<{id: string}>
+}
 
-  const { data, isError, isLoading } = useQuery({
+export default async function NoteDetailsPage({ params }: NoteDetailsPageProps ) {
+  const queryClient = new QueryClient();
+  const { id } = await params;
+
+  await queryClient.prefetchQuery({
     queryKey: ["notesDetails", id],
-    queryFn: () => fetchNoteById(id as string),
-    placeholderData: (prev) => prev,
-    refetchOnMount: false
+    queryFn: () => fetchNoteById(id),
   });
-if (isLoading){
-    return <p>Loading...</p>
-}
-if (isError){
-    return <p>Something goes wrong</p>
-}
 
   return (
-    <Modal onClose={close}>
-    <div className={css.container}>
-      <div className={css.item}>
-        <div className={css.header}>
-          <h2>{data?.title}</h2>
-        </div>
-        <p className={css.tag}>{data?.tag}</p>
-        <p className={css.content}>{data?.content}</p>
-        <p className={css.date}>{data?.createdAt}</p>
-      </div>
-    </div>
-    </Modal>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotesDetails />
+    </HydrationBoundary>
   );
-};
-
-export default NoteDetails;
+}
