@@ -10,7 +10,7 @@ const NoteDetails = () => {
   const {id} = useParams();
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["notesDetails", id],
+    queryKey: ["note", id],
     queryFn: () => fetchNoteById(id as string),
     placeholderData: (prev) => prev,
     refetchOnMount: false
